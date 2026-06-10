@@ -1,0 +1,6 @@
+{
+  "name": "Matchora",
+  "description": "Professional Arabic RTL live football streaming app for World Cup 2026",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
