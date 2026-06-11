@@ -56,6 +56,7 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
     if (l.includes('.m3u8')) return 'hls';
     if (l.includes('youtube.com') || l.includes('youtu.be')) return 'youtube';
     if (l.includes('dailymotion.com')) return 'dailymotion';
+    if (l.includes('facebook.com') || l.includes('fb.watch')) return 'facebook';
     if (l.includes('.mp4') || l.includes('.webm')) return 'mp4';
     return 'iframe';
   };
@@ -67,7 +68,7 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
     setLoading(true);
     setError(false);
 
-    if (currentType === 'iframe' || currentType === 'youtube' || currentType === 'dailymotion') {
+    if (currentType === 'iframe' || currentType === 'youtube' || currentType === 'dailymotion' || currentType === 'facebook') {
       const timer = setTimeout(() => setLoading(false), 800);
       return () => clearTimeout(timer);
     }
@@ -197,6 +198,8 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
           if (srcUrl.includes('youtube.com/watch?v=')) vId = srcUrl.split('v=')[1]?.split('&')[0];
           else if (srcUrl.includes('youtu.be/')) vId = srcUrl.split('youtu.be/')[1]?.split('?')[0];
           srcUrl = `https://www.youtube.com/embed/${vId}?autoplay=1&rel=0`;
+      } else if (currentType === 'facebook') {
+          srcUrl = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(srcUrl)}&show_text=false&autoplay=true`;
       }
       
       return (
@@ -264,59 +267,18 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
       </div>
 
       {/* Ads and Servers Container */}
-      <div className="h-auto max-h-[40vh] shrink-0 bg-[#0a0e17] flex flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden">
+      <div className="h-auto max-h-[40vh] shrink-0 bg-[#06080d] flex flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden border-t border-white/5">
         
-        {/* Top small banner */}
-        <div className="w-full flex justify-center py-2 px-4 shrink-0 bg-[#0a0e17]">
-            <AdUnit format="banner" size="320x50" className="!my-0" />
-        </div>
-
-        {/* Servers Rack */}
-        <div className="px-4 py-3 flex justify-center shrink-0 border-b border-t border-white/5">
-          <div className="flex items-center gap-3 w-full max-w-4xl mx-auto flex-wrap justify-center">
-            {servers.map((srv, idx) => {
-               const isActive = activeServer.url === srv.url;
-               return (
-                  <button
-                    key={srv.id || idx}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        if(!isActive) {
-                           setActiveServer(srv);
-                           setLoading(true);
-                           setError(false);
-                        }
-                    }}
-                    className={`
-                       px-5 py-3 rounded-lg font-bold text-sm transition-all shadow-sm border
-                       ${isActive 
-                          ? 'bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e] shadow-[0_0_15px_rgba(34,197,94,0.2)]'
-                          : 'bg-white/5 text-gray-400 border-transparent hover:bg-white/10 hover:text-white'
-                       }
-                    `}
-                  >
-                     {srv.name || (lang === 'ar' ? `سيرفر ${idx + 1}` : `Server ${idx + 1}`)}
-                  </button>
-               );
-            })}
-            
-            {servers.length === 0 && (
-               <p className="text-gray-500 italic font-medium">
-                 {lang === 'ar' ? 'لا توجد سيرفرات إضافية' : 'No additional servers'}
-               </p>
-            )}
-          </div>
-        </div>
-        
-        {/* Only Ads at the bottom here */}
-        <div className="px-4 py-4 shrink-0 flex flex-col items-center gap-4">
+        {/* Ads Section in place of servers */}
+        <div className="px-4 py-6 shrink-0 flex flex-col items-center gap-6">
             <div className="hidden md:block w-full">
-              <AdUnit format="banner" size="728x90" className="!my-0" />
+               <AdUnit format="banner" size="728x90" className="!my-0 shadow-lg rounded-xl overflow-hidden" />
             </div>
             <div className="block md:hidden w-full">
-              <AdUnit format="banner" size="320x50" className="!my-0" />
+               <AdUnit format="banner" size="320x50" className="!my-0 shadow-lg rounded-xl overflow-hidden" />
             </div>
-            <AdUnit format="native_banner" className="max-w-4xl mx-auto w-full !my-0" />
+            <AdUnit format="native_banner" className="max-w-4xl mx-auto w-full !my-0 shadow-lg rounded-xl overflow-hidden" />
+            <AdUnit format="native" className="max-w-4xl mx-auto w-full !my-0 shadow-lg rounded-xl overflow-hidden" />
         </div>
       </div>
       
