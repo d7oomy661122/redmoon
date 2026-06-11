@@ -1,18 +1,15 @@
-{
-  "matches": [
+"matches": [
     {
-      "homeTeam": "mexico",
-      "awayTeam": "South Africa",
+      "homeTeam": "South Africa",
+      "awayTeam": "Mexico",
       "servers": [
         {
           "id": "srv1",
-          "name": "السرفر 01",
-          "url": "https://www.facebook.com/61550251642887/videos/2447660032398238/?mibextid=rS40aB7S9Ucbxw6v",
+          "name": "سيرفر 1",
+          "url": "https://www.facebook.com/Reuters/videos/2490261414782169/?mibextid=rS40aB7S9Ucbxw6v",
           "language": "عربي"
-        },
-
+        }
       ]
-      
     },
     {
       "homeTeam": "England",
@@ -27,4 +24,3 @@
       ]
     }
   ]
-}
