@@ -6,13 +6,13 @@
       "servers": [
         {
           "id": "srv1",
-          "name": "سيرفر 1 - جودة عالية",
+          "name": "سيرفر 1",
           "url": "https://www.youtube.com/watch?v=36YnV9STBqc",
           "language": "عربي"
         },
         {
           "id": "srv2",
-          "name": "سيرفر 2 - جودة منخفضة",
+          "name": "سيرفر 2",
           "url": "https://www.youtube.com/embed/live_stream?channel=UCEXAMPLE2",
           "language": "عربي"
         }
@@ -24,7 +24,7 @@
       "servers": [
         {
           "id": "srv1",
-          "name": "سيرفر 1 - متعدد الجودات",
+          "name": "سيرفر 1",
           "url": "https://www.youtube.com/embed/live_stream?channel=UCEXAMPLE1",
           "language": "عربي"
         }
