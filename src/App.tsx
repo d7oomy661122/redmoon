@@ -17,32 +17,17 @@ export default function App() {
   const [activeMatch, setActiveMatch] = useState<Match | null>(null);
   const [activeStream, setActiveStream] = useState<Stream | null>(null);
   
-  const initialPath = window.location.pathname.replace('/', '').toLowerCase() || 'all';
-  const initialFilter = ['all', 'live', 'upcoming', 'finished'].includes(initialPath) ? initialPath : 'all';
-  const [filter, setFilterState] = useState(initialFilter);
+  const [filter, setFilter] = useState('all');
 
   const [pageLoading, setPageLoading] = useState(false);
 
-  useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname.replace('/', '').toLowerCase() || 'all';
-      if (['all', 'live', 'upcoming', 'finished'].includes(path)) {
-        setFilterState(path);
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  const setFilter = (f: string) => {
+  const handleFilterChange = (f: string) => {
     if (f === filter) return;
     setPageLoading(true);
     setTimeout(() => {
-      setFilterState(f);
-      const url = f === 'all' ? '/' : `/${f}`;
-      window.history.pushState(null, '', url);
+      setFilter(f);
       setPageLoading(false);
-    }, 600); // delay to show loader between tabs
+    }, 600);
   };
 
   const handleMatchClick = (match: Match) => {
@@ -174,7 +159,7 @@ export default function App() {
               lang={lang}
               onSelect={handleMatchClick}
               filter={filter}
-              setFilter={setFilter}
+              setFilter={handleFilterChange}
             />
 
             {/* Bottom Ad Banner */}
