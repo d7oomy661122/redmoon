@@ -25,6 +25,17 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [playerClicks, setPlayerClicks] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [playerSpeed, setPlayerSpeed] = useState(1);
+
+  const toggleZoom = () => setIsZoomed(!isZoomed);
+  const toggleSpeed = () => {
+     const nextSpeed = playerSpeed === 1 ? 1.5 : playerSpeed === 1.5 ? 2 : 1;
+     setPlayerSpeed(nextSpeed);
+     if (videoRef.current) {
+        videoRef.current.playbackRate = nextSpeed;
+     }
+  };
 
   // Load all servers for this match
   useEffect(() => {
@@ -49,6 +60,29 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
          setServers(match.streams || [stream]);
       });
   }, [match]);
+
+  // Inject global ads specifically for the player
+  useEffect(() => {
+    // Social Bar Script
+    const script1 = document.createElement('script');
+    script1.src = 'https://pl29706129.effectivecpmnetwork.com/10/d5/b6/10d5b6fe0b92b064f460506f82994fa4.js';
+    script1.type = 'text/javascript';
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    // Popunder Script
+    const script2 = document.createElement('script');
+    script2.src = 'https://pl29706131.effectivecpmnetwork.com/ea/3b/b5/ea3bb565775a4289ddfea7c403892f48.js';
+    script2.type = 'text/javascript';
+    script2.async = true;
+    document.body.appendChild(script2);
+
+    return () => {
+      // Cleanup to prevent leakage
+      if (document.body.contains(script1)) document.body.removeChild(script1);
+      if (document.body.contains(script2)) document.body.removeChild(script2);
+    };
+  }, []);
 
   // Determine stream type accurately
   const getStreamType = (url: string) => {
@@ -225,7 +259,25 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
       </header>
       
       {/* Player Container */}
-      <div className="flex-1 w-full bg-[#000000] relative flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="flex-1 w-full bg-[#000000] relative flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden">
+         {/* Custom Branding replacing the original top left LIVE badge */}
+         <div className="absolute top-2 left-2 md:top-4 md:left-4 z-40 bg-[#e60000] text-white px-3 py-1 md:px-4 md:py-2 rounded-lg shadow-xl border border-white/20 flex items-center gap-2 max-w-[140px] pointer-events-none">
+            <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-white animate-pulse shrink-0" />
+            <span className="font-black text-xs md:text-sm tracking-widest uppercase truncate">MATCHORA</span>
+         </div>
+
+         {/* Right Controls */}
+         <div className="absolute top-2 right-2 md:top-4 md:right-4 z-40 flex flex-col gap-2">
+           <button onClick={toggleZoom} className="bg-black/60 hover:bg-black/90 backdrop-blur-md text-white px-3 py-2 rounded-lg font-bold text-xs ring-1 ring-white/20 shadow-lg transition-all flex items-center justify-center cursor-pointer">
+              {isZoomed ? (lang === 'ar' ? 'تصغير' : 'Zoom Out') : (lang === 'ar' ? 'تكبير' : 'Zoom In')}
+           </button>
+           {(currentType === 'hls' || currentType === 'mp4') && (
+             <button onClick={toggleSpeed} className="bg-black/60 hover:bg-black/90 backdrop-blur-md text-white px-3 py-2 rounded-lg font-bold text-xs ring-1 ring-white/20 shadow-lg transition-all flex items-center justify-center cursor-pointer">
+                {playerSpeed}x
+             </button>
+           )}
+         </div>
+
          {playerClicks < 3 && (
             <div 
                className="absolute inset-0 z-30 cursor-pointer" 
@@ -236,11 +288,14 @@ export default function PlayerPage({ match, stream, lang, onBack }: PlayerPagePr
                }}
             />
          )}
-         {(currentType === 'hls' || currentType === 'mp4') ? (
-            <video ref={videoRef} className="w-full h-full object-contain" crossOrigin="anonymous" playsInline></video>
-         ) : (
-            renderIframe()
-         )}
+         
+         <div className="w-full h-full relative origin-center" style={{ transform: isZoomed ? 'scale(1.25)' : 'scale(1)', transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+           {(currentType === 'hls' || currentType === 'mp4') ? (
+              <video ref={videoRef} className="w-full h-full object-contain" crossOrigin="anonymous" playsInline></video>
+           ) : (
+              renderIframe()
+           )}
+         </div>
          
          {/* Overlays */}
          {loading && (
