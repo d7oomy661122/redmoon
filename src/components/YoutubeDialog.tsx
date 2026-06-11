@@ -7,11 +7,15 @@ export default function YoutubeDialog({ lang }: { lang: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Show after 3 seconds always
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 3000);
-    return () => clearTimeout(timer);
+    // Only show once
+    const hasSeen = localStorage.getItem('matchora_yt_dialog_seen2');
+    if (!hasSeen) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        localStorage.setItem('matchora_yt_dialog_seen2', 'true');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   if (!isOpen) return null;
