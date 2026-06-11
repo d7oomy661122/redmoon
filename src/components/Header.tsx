@@ -28,7 +28,7 @@ export default function Header({
       <div className="w-12 h-12 shrink-0 flex items-center justify-center relative">
          <div className="absolute inset-0 rounded-full border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
          <img 
-           src="/logo.jpg" 
+           src="https://i.ibb.co/MxsSzdwY/1781130888674-2.jpg" 
            alt="شعار الموقع" 
            className="w-full h-full object-cover rounded-full shadow-lg"
            onError={(e) => {
