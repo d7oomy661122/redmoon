@@ -6,16 +6,11 @@
       "servers": [
         {
           "id": "srv1",
-          "name": "سيرفر 1",
-          "url": "https://www.facebook.com/MLBBEsportsOfficial/videos/4344446899200970/?mibextid=rS40aB7S9Ucbxw6v",
+          "name": "srv 1",
+          "url": "https://www.facebook.com/61550251642887/videos/2447660032398238/?mibextid=rS40aB7S9Ucbxw6v",
           "language": "عربي"
         },
-        {
-          "id": "srv2",
-          "name": "سيرفر 2",
-          "url": "https://www.youtube.com/embed/live_stream?channel=UCEXAMPLE2",
-          "language": "عربي"
-        }
+        
       ]
     },
     {
